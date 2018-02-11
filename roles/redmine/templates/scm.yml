@@ -8,7 +8,7 @@ production:
   # post_delete: /usr/local/bin/post-delete.sh
   max_repos: 0
   only_creator: false
-  allow_add_local: false
+  allow_add_local: true
   allow_pickup: false
   svn:
     path: /var/lib/svn/repo
@@ -18,7 +18,7 @@ production:
   git:
     path: /var/lib/git/repo
     git: /usr/bin/git
-    options: --mirror
+    options: --bare
     url: http://localhost/git
     update_server_info: true
     git_ext: true
