@@ -1,0 +1,108 @@
+- name: gitbucket 作業フォルダ作成
+  file:
+    path=/var/log/git
+    state=directory
+    mode=0755
+    owner={{ git_dir_owner }}
+    group={{ git_dir_group }}
+
+- name: gitbucket 作業フォルダ作成
+  file:
+    path=/var/run/git
+    state=directory
+    mode=0755
+    owner={{ git_dir_owner }}
+    group={{ git_dir_group }}
+
+- name: gitbucket　システムフォルダ作成
+  file:
+    path=/var/lib/git/etc
+    state=directory
+    mode=0755
+    owner={{ git_dir_owner }}
+    group={{ git_dir_group }}
+
+- name: gitbucket　システムフォルダ作成
+  file:
+    path=/var/lib/git/gitbucket
+    state=directory
+    mode=0755
+    owner={{ git_dir_owner }}
+    group={{ git_dir_group }}
+
+- name: gitbucket　ダウンロード
+  get_url:
+    url={{ gitbucket_url_dir }}
+    dest=/var/lib/git/gitbucket/{{gitbucket_archive_name}}
+    force=True
+
+- name: gitbucket.war リンク作成
+  file:
+    src: /var/lib/git//gitbucket/{{gitbucket_archive_name}}
+    dest: /var/lib/git/gitbucket/gitbucket.war
+    state: link
+
+- name: gitbucket起動ファイル作成
+  become: yes
+  template:
+    src=startup.sh
+    dest=/var/lib/git/gitbucket/startup.sh
+    mode=0755
+    owner={{ git_dir_owner }}
+    group={{ git_dir_group }}
+
+- name: apache設定ファイル作成
+  become: yes
+  template:
+    src=httpd.conf
+    dest=/var/lib/git/etc/httpd.conf
+    owner={{ git_dir_owner }}
+    group={{ git_dir_group }}
+
+- name: logrotate設定ファイル作成
+  become: yes
+  template:
+    src=logrotate.conf
+    dest=/var/lib/git/etc/logrotate.conf
+    owner={{ git_dir_owner }}
+    group={{ git_dir_group }}
+
+- name: systemd起動設定ファイル作成
+  become: yes
+  template:
+    src=service.conf
+    dest=/var/lib/git/etc/service.conf
+    owner={{ git_dir_owner }}
+    group={{ git_dir_group }}
+
+- name: service設定
+  file:
+    src: /var/lib/git/etc/service.conf
+    dest: /usr/lib/systemd/system/gitbucket.service
+    state: hard
+
+- name: serviceの設定・起動
+  become: yes
+  service:
+    name=gitbucket
+    state=restarted
+    enabled=yes
+
+- name: apache連携設定
+  file:
+    src: /var/lib/git/etc/httpd.conf
+    dest: /etc/httpd/conf.d/gitbucket.conf
+    state: link
+
+- name: logrotate設定
+  file:
+    src: /var/lib/git/etc/logrotate.conf
+    dest: /etc/logrotate.d/gitbucket
+    state: link
+
+- name: httpdの再起動
+  become: yes
+  service:
+    name=httpd
+    state=restarted
+    enabled=yes

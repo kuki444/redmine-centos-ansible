@@ -58,10 +58,93 @@
   yum:
     name='ImageMagick,ImageMagick-devel,ipa-pgothic-fonts'
 
+- name: curlのインストール
+  become: yes
+  yum:
+    name='curl'
+
+- name: yum Repository ius インストール
+  become: yes
+  shell:
+    curl -s https://setup.ius.io | sh
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+  register:
+    result_ius
+  changed_when: false
+  failed_when: result_ius.rc not in [0, 1]
+
+- name: gitのアンインストール
+  become: yes
+  yum:
+    name='git'
+    state=absent
+
+- name: gitのインストール
+  become: yes
+  yum:
+    name='git2u'
+
+- name: yum Repository wandisco インストール
+  become: yes
+  template:
+    src=wandisco.repo
+    dest=/etc/yum.repos.d/wandisco.repo
+    force=no
+
+- name: yum Repository wandisco key インストール
+  rpm_key:
+    key: "http://opensource.wandisco.com/RPM-GPG-KEY-WANdisco"
+
+- name: subversion, mod_dav_svn のインストール
+  become: yes
+  yum: enablerepo=wandisco-svn
+    name='subversion,mod_dav_svn'
+
+- name: mod_dav_svnのコンフィグ削除
+  file:
+    path=/etc/httpd/conf.d/subversion.conf
+    state=absent
+
+- name: mod_perlのインストール
+  become: yes
+  yum:
+    name='mod_perl'
+
+- name: perl-DBIのインストール
+  become: yes
+  yum:
+    name='perl-DBI'
+
+- name: perl-DBD-pgのインストール
+  become: yes
+  yum:
+    name='perl-DBD-Pg'
+
+- name: perl-Digest-SHAのインストール
+  become: yes
+  yum:
+    name='perl-Digest-SHA'
+
+- name: javaのインストール
+  become: yes
+  yum:
+    name='{{ java_version }}'
+
 - name: そのほかのツールのインストール
   become: yes
   yum:
-    name='subversion,git,which'
+    name='which,wget'
+
+- name: git ユーザ追加
+  become: yes
+  user:
+    name=git
+    shell=/bin/bash
+    groups=apache
+    createhome=yes
+    home=/var/lib/git
+    comment="Git repository"
 
 - name: 作業ディレクトリ作成
   file: path={{ work_dir }}

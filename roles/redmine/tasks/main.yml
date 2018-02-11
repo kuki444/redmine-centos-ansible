@@ -84,6 +84,24 @@
     repo=https://github.com/farend/redmine_theme_farend_basic.git
     dest={{ redmine_dir }}/public/themes/farend_basic
 
+- name: farend_fancyテーマのダウンロード
+  become: yes
+  git:
+    repo=https://github.com/farend/redmine_theme_farend_fancy.git
+    dest={{ redmine_dir }}/public/themes/farend_fancy
+
+- name: redmine-theme-flatテーマのダウンロード
+  become: yes
+  git:
+    repo=https://github.com/tsi/redmine-theme-flat.git
+    dest={{ redmine_dir }}/public/themes/redmine-theme-flat
+
+- name: Dwarfテーマのダウンロード
+  become: yes
+  git:
+    repo=https://github.com/Feckinotter/Dwarf.git
+    dest={{ redmine_dir }}/public/themes/Dwarf
+
 - name: テーマをfarend_basicに切り替え
   become: yes
   command:
@@ -138,3 +156,152 @@
     RAILS_ENV: production
   when:
     result_database_yml|changed
+
+- name: clipboard_image_paste pluginのダウンロード
+  become: yes
+  git:
+    repo=https://github.com/peclik/clipboard_image_paste.git
+    dest={{ redmine_dir }}/plugins/clipboard_image_paste
+
+- name: redmine_issue_templates pluginのダウンロード
+  become: yes
+  git:
+    repo=https://github.com/akiko-pusu/redmine_issue_templates.git
+    dest={{ redmine_dir }}/plugins/redmine_issue_templates
+
+- name: pluginのダウンロード redmine_issues_summary_graph
+  become: yes
+  git:
+    repo=https://github.com/suer/redmine_issues_summary_graph.git
+    dest={{ redmine_dir }}/plugins/redmine_issues_summary_graph
+
+- name: pluginのダウンロード redmine_issues_tree 
+  become: yes
+  git:
+    repo=https://github.com/Loriowar/redmine_issues_tree.git
+    dest={{ redmine_dir }}/plugins/redmine_issues_tree
+
+- name: pluginのダウンロード redmine_local_avatars
+  become: yes
+  git:
+    repo=https://github.com/ncoders/redmine_local_avatars.git
+    dest={{ redmine_dir }}/plugins/redmine_local_avatars
+
+- name: pluginのダウンロード redmine_pivot_table
+  become: yes
+  git:
+    repo=https://github.com/deecay/redmine_pivot_table.git
+    dest={{ redmine_dir }}/plugins/redmine_pivot_table
+
+- name: pluginのダウンロード redmine_theme_changer
+  become: yes
+  git:
+    repo=https://github.com/haru/redmine_theme_changer.git
+    dest={{ redmine_dir }}/plugins/redmine_theme_changer
+
+- name: pluginのダウンロード redmine_work_time
+  become: yes
+  git:
+    repo=https://github.com/tkusukawa/redmine_work_time.git
+    dest={{ redmine_dir }}/plugins/redmine_work_time
+
+- name: pluginのダウンロード redmine_custom_query_Count
+  become: yes
+  git:
+    repo=https://github.com/kuki444/redmine_custom_query_Count.git
+    dest={{ redmine_dir }}/plugins/redmine_custom_query_Count
+
+- name: pluginのダウンロード redmine_holidays_plugin
+  become: yes
+  git:
+    repo=https://github.com/kuki444/redmine_holidays_plugin.git
+    dest={{ redmine_dir }}/plugins/redmine_holidays_plugin
+
+- name: pluginのダウンロード SCM Creator
+  become: yes
+  subversion:
+    repo=https://github.com/kuki444/redmine_scm_creator.git
+    dest={{ redmine_dir }}/plugins/redmine_scm_creator
+
+- name: plugin SCM Creator scm.ymlの作成
+  become: yes
+  template:
+    src=scm.yml
+    dest={{ redmine_dir }}/config/scm.yml
+    force=no
+
+- name: pluginのダウンロード github_hook
+  become: yes
+  subversion:
+    repo=https://github.com/koppen/redmine_github_hook.git
+    dest={{ redmine_dir }}/plugins/redmine_github_hook
+
+- name: pluginのダウンロード github_hook
+  become: yes
+  subversion:
+    repo=https://github.com/suer/redmine_oauth_provider.git
+    dest={{ redmine_dir }}/plugins/redmine_oauth_provider
+
+
+- name: pluginのマイグレーション
+  become: yes
+  command:
+    bundle install
+    chdir={{ redmine_dir }}
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+    RAILS_ENV: production
+
+- name: pluginのデータベースのマイグレーション
+  become: yes
+  command:
+    bundle exec rake redmine:plugins:migrate
+    chdir={{ redmine_dir }}
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+    RAILS_ENV: production
+
+- name: Redmine Authn設定のフォルダ作成
+  file:
+    path=/etc/httpd/Apache/Authn
+    state=directory
+
+- name: Redmine Authn設定
+  file:
+    src: "{{ redmine_dir }}/extra/svn/Redmine.pm"
+    dest: /etc/httpd/Apache/Authn/Redmine.pm
+    state: link
+
+- name: subversion Redmine svn設定のフォルダ作成1/2
+  file:
+    path=/var/lib/svn
+    state=directory
+    mode=0755
+    owner=apache
+    group=apache
+
+- name: subversion Redmine repo設定のフォルダ作成2/2
+  file:
+    path=/var/lib/svn/repo
+    state=directory
+    mode=2775
+    owner=apache
+    group=apache
+
+- name: git Redmine repo設定のフォルダ作成1/2
+  file:
+    path=/var/lib/git
+    state=directory
+    mode=2755
+    owner=git
+    group=apache
+
+- name: git Redmine repo設定のフォルダ作成2/2
+  file:
+    path=/var/lib/git/repo
+    state=directory
+    mode=2775
+    owner=git
+    group=apache
+
+

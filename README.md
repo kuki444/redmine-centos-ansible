@@ -29,14 +29,17 @@ Ansibleを使ってRedmineを自動インストールするためのプレイブ
 ### Ansibleとgitのインストール
 
 ```
+yum update
 yum install -y epel-release
-yum install -y ansible git
+yum install -y ansible
 ```
 
 ### playbookのダウンロード
 
 ```
-git clone https://github.com/farend/redmine-centos-ansible.git
+# git clone https://github.com/farend/redmine-centos-ansible.git
+# playbookをセット
+cd /usr/local/src/redmine-centos-ansible
 ```
 
 ### PostgreSQLに設定するパスワードの変更
@@ -53,6 +56,7 @@ ansible-playbook -i hosts site.yml
 ```
 
 10〜20分ほどでインストールが完了します。webブラウザで `http://サーバIPアドレス/redmine` にアクセスしてください。Redmineの画面が表示されるはずです。
+gitbucket webブラウザで `http://サーバIPアドレス/gitbucket` にアクセスしてください。gitbucketの画面が表示されるはずです。
 
 
 ## ライセンス

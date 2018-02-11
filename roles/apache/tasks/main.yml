@@ -19,6 +19,7 @@
   gem:
     name=passenger
     user_install=no
+    version={{ passenger_version }}
   environment:
     PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
   when: result.rc == 1
@@ -45,6 +46,18 @@
   template:
     src=redmine.conf
     dest=/etc/httpd/conf.d/redmine.conf
+
+- name: redmine_git.confの作成
+  become: yes
+  template:
+    src=redmine_git.conf
+    dest=/etc/httpd/conf.d/redmine_git.conf
+
+- name: redmine_svn.confの作成
+  become: yes
+  template:
+    src=redmine_svn.conf
+    dest=/etc/httpd/conf.d/redmine_svn.conf
 
 - name: httpdの再起動
   become: yes

@@ -27,3 +27,26 @@ ruby_archive_name: "{{ ruby_archive_version }}.{{ ruby_archive_ext }}"
 
 ruby_file_name: /usr/local/bin/ruby
 work_dir: /tmp/redmine-setup
+
+# rails verson
+rails_version: 4.2.8
+
+# passenger verson
+passenger_version: 5.1.12
+
+# インストールするjavaのソース
+
+java_version: java-1.8.0-openjdk.x86_64
+
+
+# gitbucketのデプロイ先ディレクトリのオーナー:グループ
+git_dir_owner: git
+git_dir_group: "{{redmine_dir_group}}"
+
+# ダウンロードするgitbucketのソース
+gitbucket_url_dir: https://github.com/gitbucket/gitbucket/releases/download/4.21.2/gitbucket.war
+gitbucket_archive_version: gitbucket-4.21.2
+gitbucket_archive_ext: war
+gitbucket_archive_name: "{{ gitbucket_archive_version }}.{{ gitbucket_archive_ext }}"
+
+
