@@ -219,7 +219,7 @@
 
 - name: pluginのダウンロード SCM Creator
   become: yes
-  subversion:
+  git:
     repo=https://github.com/kuki444/redmine_scm_creator.git
     dest={{ redmine_dir }}/plugins/redmine_scm_creator
 
