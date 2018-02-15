@@ -19,6 +19,7 @@ Ansibleを使ってRedmineを自動インストールするためのプレイブ
 * CentOS 7.3
 * PostgreSQL
 * Apache
+* gitlab
 
 
 ## Redmineのインストール手順
@@ -56,7 +57,7 @@ ansible-playbook -i hosts site.yml
 ```
 
 10〜20分ほどでインストールが完了します。webブラウザで `http://サーバIPアドレス/redmine` にアクセスしてください。Redmineの画面が表示されるはずです。
-gitbucket webブラウザで `http://サーバIPアドレス/gitbucket` にアクセスしてください。gitbucketの画面が表示されるはずです。
+gitbucket webブラウザで `http://サーバIPアドレス/gitlab` にアクセスしてください。gitlabの画面が表示されるはずです。
 
 
 ## ライセンス

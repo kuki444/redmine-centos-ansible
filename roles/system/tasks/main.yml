@@ -126,24 +126,49 @@
   yum:
     name='perl-Digest-SHA'
 
-- name: javaのインストール
+- name: yum gitlab-ce Repository 登録用のツールインストール
   become: yes
   yum:
-    name='{{ java_version }}'
+    name='pygpgme,yum-utils'
+
+- name: yum Repository gitlab-ce インストール
+  become: yes
+  shell:
+    curl -s https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | bash
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+  register:
+    result_gitlab
+  changed_when: false
+  failed_when: result_gitlab.rc not in [0, 1]
+
+- name: yum Repositoryキャッシュ削除
+  become: yes
+  shell:
+    rm -rf /var/cache/yum/*
+
+- name: yum Repository gitlab-ce key インストール
+  rpm_key:
+    key: "https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey/gitlab-gitlab-ce-3D645A26AB9FBD22.pub.gpg"
+
+- name: gitlab-ce のインストール
+  become: yes
+  yum: 
+    name='gitlab-ce'
 
 - name: そのほかのツールのインストール
   become: yes
   yum:
     name='which,wget'
 
-- name: git ユーザ追加
+- name: git2 redmineリポジトリ用 ユーザ追加
   become: yes
   user:
-    name=git
+    name=git2
     shell=/bin/bash
     groups=apache
     createhome=yes
-    home=/var/lib/git
+    home=/var/lib/git2
     comment="Git repository"
 
 - name: 作業ディレクトリ作成

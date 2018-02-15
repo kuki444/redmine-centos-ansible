@@ -1,0 +1,22 @@
+- name: apache設定ファイル作成
+  become: yes
+  template:
+    src=httpd.conf
+    dest=/etc/httpd/conf.d/gitlab.conf
+
+- name: gitlab設定ファイル作成
+  become: yes
+  template:
+    src=gitlab.rb
+    dest=/etc/gitlab/gitlab.rb
+
+- name: gitlab設定 chef
+  become: yes
+  shell: gitlab-ctl reconfigure
+
+- name: httpdの再起動
+  become: yes
+  service:
+    name=httpd
+    state=restarted
+    enabled=yes

@@ -236,7 +236,7 @@
     repo=https://github.com/koppen/redmine_github_hook.git
     dest={{ redmine_dir }}/plugins/redmine_github_hook
 
-- name: pluginのダウンロード github_hook
+- name: pluginのダウンロード oauth_provider
   become: yes
   subversion:
     repo=https://github.com/suer/redmine_oauth_provider.git
@@ -290,18 +290,18 @@
 
 - name: git Redmine repo設定のフォルダ作成1/2
   file:
-    path=/var/lib/git
+    path=/var/lib/git2
     state=directory
     mode=2755
-    owner=git
+    owner=git2
     group=apache
 
-- name: git Redmine repo設定のフォルダ作成2/2
+- name: git2 Redmine repo設定のフォルダ作成2/2
   file:
-    path=/var/lib/git/repo
+    path=/var/lib/git2/repo
     state=directory
     mode=2775
-    owner=git
+    owner=git2
     group=apache
 
 

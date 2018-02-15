@@ -6,7 +6,7 @@
     - ruby
     - redmine
     - apache
-    - gitbucket
+    - gitlab
 
   post_tasks:
     - name: 完了

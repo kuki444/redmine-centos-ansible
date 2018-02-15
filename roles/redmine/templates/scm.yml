@@ -16,7 +16,7 @@ production:
     url: http://localhost/svn
     append: trunk
   git:
-    path: /var/lib/git/repo
+    path: /var/lib/git2/repo
     git: /usr/bin/git
     options: --bare
     url: http://localhost/git
