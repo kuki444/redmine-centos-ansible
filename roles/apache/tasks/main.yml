@@ -19,7 +19,6 @@
   gem:
     name=passenger
     user_install=no
-    version={{ passenger_version }}
   environment:
     PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
   when: result.rc == 1

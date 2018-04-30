@@ -1,8 +1,9 @@
 - name: Redmineのソースコードをチェックアウト
   become: yes
-  subversion:
-    repo={{ redmine_svn_url }}
+  git:
+    repo={{ redmine_git_url }}
     dest={{ redmine_dir }}
+    version={{ redmine_version }} 
 
 - name: database.ymlの作成
   become: yes
@@ -175,12 +176,6 @@
     repo=https://github.com/suer/redmine_issues_summary_graph.git
     dest={{ redmine_dir }}/plugins/redmine_issues_summary_graph
 
-- name: pluginのダウンロード redmine_issues_tree 
-  become: yes
-  git:
-    repo=https://github.com/Loriowar/redmine_issues_tree.git
-    dest={{ redmine_dir }}/plugins/redmine_issues_tree
-
 - name: pluginのダウンロード redmine_local_avatars
   become: yes
   git:
@@ -217,26 +212,13 @@
     repo=https://github.com/kuki444/redmine_holidays_plugin.git
     dest={{ redmine_dir }}/plugins/redmine_holidays_plugin
 
-- name: pluginのダウンロード SCM Creator
-  become: yes
-  git:
-    repo=https://github.com/kuki444/redmine_scm_creator.git
-    dest={{ redmine_dir }}/plugins/redmine_scm_creator
-
-- name: plugin SCM Creator scm.ymlの作成
-  become: yes
-  template:
-    src=scm.yml
-    dest={{ redmine_dir }}/config/scm.yml
-    force=no
-
 - name: pluginのダウンロード github_hook
   become: yes
   subversion:
     repo=https://github.com/koppen/redmine_github_hook.git
     dest={{ redmine_dir }}/plugins/redmine_github_hook
 
-- name: pluginのダウンロード github_hook
+- name: pluginのダウンロード oauth_provider
   become: yes
   subversion:
     repo=https://github.com/suer/redmine_oauth_provider.git

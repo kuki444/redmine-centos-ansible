@@ -11,4 +11,6 @@
   post_tasks:
     - name: 完了
       debug:
-        msg='インストールが完了しました。 http://{{ ansible_default_ipv4.address }}/redmine/ にアクセスしてください。'
+        msg: |+
+          'インストールが完了しました。 http://{{ ansible_default_ipv4.address }}/redmine/ にアクセスしてください。'
+          'http://{{ ansible_default_ipv4.address }}/gitbucket/ '

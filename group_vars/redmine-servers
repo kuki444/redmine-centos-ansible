@@ -4,10 +4,13 @@ db_passwd_redmine: Must_be_changed!
 # ----------------------------------------------------------------------
 
 # Redmineのチェックアウト元URL
-redmine_svn_url: http://svn.redmine.org/redmine/branches/3.4-stable
+redmine_git_url: https://github.com/redmine/redmine.git
 
 # Redmineのデプロイ先ディレクトリ
 redmine_dir: /var/lib/redmine
+
+# Redmineのバージョン
+redmine_version: 3.4-stable
 
 # Redmineのデプロイ先ディレクトリのオーナー:グループ
 redmine_dir_owner: apache
@@ -20,16 +23,18 @@ redmine_font_path: /usr/share/fonts/truetype/takao-gothic/TakaoPGothic.ttf
 pg_hba_conf_path: /var/lib/pgsql/data/pg_hba.conf
 
 # ダウンロードするRubyのソースコード
-ruby_url_dir: https://cache.ruby-lang.org/pub/ruby/2.4
-ruby_archive_version: ruby-2.4.1
+ruby_version: 2.4
+ruby_archive_version: 2.4.4
+ruby_archive_version_name: ruby-{{ ruby_archive_version }}
+ruby_url_dir: https://cache.ruby-lang.org/pub/ruby/{{ ruby_version }}
 ruby_archive_ext: tar.bz2
-ruby_archive_name: "{{ ruby_archive_version }}.{{ ruby_archive_ext }}"
+ruby_archive_name: "ruby-{{ ruby_archive_version }}.{{ ruby_archive_ext }}"
 
 ruby_file_name: /usr/local/bin/ruby
 work_dir: /tmp/redmine-setup
 
 # rails verson
-rails_version: 4.2.8
+rails_version: 4.2.10
 
 # passenger verson
 passenger_version: 5.1.12
@@ -44,9 +49,9 @@ git_dir_owner: git
 git_dir_group: "{{redmine_dir_group}}"
 
 # ダウンロードするgitbucketのソース
-gitbucket_url_dir: https://github.com/gitbucket/gitbucket/releases/download/4.21.2/gitbucket.war
-gitbucket_archive_version: gitbucket-4.21.2
+gitbucket_archive_version: 4.24.1
+gitbucket_url_dir: "https://github.com/gitbucket/gitbucket/releases/download/{{ gitbucket_archive_version }}/gitbucket.war"
 gitbucket_archive_ext: war
-gitbucket_archive_name: "{{ gitbucket_archive_version }}.{{ gitbucket_archive_ext }}"
+gitbucket_archive_name: "gitbucket-{{ gitbucket_archive_version }}.{{ gitbucket_archive_ext }}"
 
 
