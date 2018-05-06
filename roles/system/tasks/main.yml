@@ -29,6 +29,21 @@
   command: firewall-cmd --zone=public --add-service=http --permanent
   when: firewall_state.rc == 0
 
+- name: firewalldでgitbucketを作成
+  become: yes
+  command: firewall-cmd --permanent --new-service gitbucket
+  when: firewall_state.rc == 0
+
+- name: firewalldでgitbucketのssh portを作成
+  become: yes
+  command: firewall-cmd --permanent --service=gitbucket --add-port=29418/tcp
+  when: firewall_state.rc == 0
+
+- name: firewalldでgitbucketを許可
+  become: yes
+  command: firewall-cmd --zone=public --add-service=gitbucket --permanent
+  when: firewall_state.rc == 0
+
 - name: firewalldのポリシーをリロード
   become: yes
   command: firewall-cmd --reload
