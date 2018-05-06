@@ -54,12 +54,3 @@
   environment:
     PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
 
-- name: railsのインストール
-  become: yes
-  gem:
-    name=rails
-    user_install=no
-    version={{ rails_version }}
-  environment:
-    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
-
