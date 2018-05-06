@@ -32,7 +32,7 @@
 - name: gemsパッケージのインストール
   become: yes
   command:
-    bundle install --path vendor/bundle
+    bundle install --without development test --path vendor/bundle
     chdir={{ redmine_dir }}
   environment:
     PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
@@ -212,15 +212,28 @@
     repo=https://github.com/kuki444/redmine_holidays_plugin.git
     dest={{ redmine_dir }}/plugins/redmine_holidays_plugin
 
+- name: pluginのダウンロード SCM Creator
+  become: yes
+  git:
+    repo=https://github.com/kuki444/redmine_scm_creator.git
+    dest={{ redmine_dir }}/plugins/redmine_scm_creator
+
+- name: plugin SCM Creator scm.ymlの作成
+  become: yes
+  template:
+    src=scm.yml
+    dest={{ redmine_dir }}/config/scm.yml
+    force=no
+
 - name: pluginのダウンロード github_hook
   become: yes
-  subversion:
+  git:
     repo=https://github.com/koppen/redmine_github_hook.git
     dest={{ redmine_dir }}/plugins/redmine_github_hook
 
 - name: pluginのダウンロード oauth_provider
   become: yes
-  subversion:
+  git:
     repo=https://github.com/suer/redmine_oauth_provider.git
     dest={{ redmine_dir }}/plugins/redmine_oauth_provider
 
