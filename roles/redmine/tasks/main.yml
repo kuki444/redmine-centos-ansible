@@ -192,12 +192,14 @@
   become: yes
   git:
     repo=https://github.com/haru/redmine_theme_changer.git
+    version=0.3.1
     dest={{ redmine_dir }}/plugins/redmine_theme_changer
 
 - name: pluginのダウンロード redmine_work_time
   become: yes
   git:
     repo=https://github.com/tkusukawa/redmine_work_time.git
+    version=0.3.4
     dest={{ redmine_dir }}/plugins/redmine_work_time
 
 - name: pluginのダウンロード redmine_custom_query_Count
