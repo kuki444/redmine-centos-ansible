@@ -42,7 +42,7 @@ yum install -y git
 ```
 # playbookをセット
 cd /usr/local/src
-git clone https://github.com/farend/redmine-centos-ansible.git
+git clone https://github.com/kuki444/redmine-centos-ansible.git
 ```
 
 ### PostgreSQLに設定するパスワードの変更
