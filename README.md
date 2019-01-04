@@ -19,6 +19,7 @@ Ansibleを使ってRedmineを自動インストールするためのプレイブ
 * CentOS 7.3
 * PostgreSQL
 * Apache
+* Gitbucket
 
 
 ## Redmineのインストール手順
@@ -39,21 +40,22 @@ yum install -y git
 ### playbookのダウンロード
 
 ```
-# git clone https://github.com/farend/redmine-centos-ansible.git
 # playbookをセット
-cd /usr/local/src/redmine-centos-ansible
+cd /usr/local/src
+git clone https://github.com/farend/redmine-centos-ansible.git
 ```
 
 ### PostgreSQLに設定するパスワードの変更
 
 ダウンロードしたプレイブック内のファイル `group_vars/redmine-servers` をエディタで開き、 `db_passwd_redmine` を適当な内容に変更してください。これはPostgreSQLのRedmine用ユーザー redmine に設定されるパスワードです。
+vi /usr/local/src/redmine-centos-ansible/group_vars/redmine-servers
 
 ### playbook実行
 
 下記コマンドを実行してください。Redmineの自動インストールが開始されます。
 
 ```
-cd redmine-centos-ansible
+cd /usr/local/src/redmine-centos-ansible
 ansible-playbook -i hosts site.yml
 ```
 
