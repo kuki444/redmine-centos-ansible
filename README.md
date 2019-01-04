@@ -32,6 +32,7 @@ Ansibleを使ってRedmineを自動インストールするためのプレイブ
 yum update
 yum install -y epel-release
 yum install -y ansible
+
 ```
 
 ### playbookのダウンロード
