@@ -45,7 +45,7 @@ git_dir_owner: git
 git_dir_group: "{{redmine_dir_group}}"
 
 # ダウンロードするgitbucketのソース
-gitbucket_archive_version: 4.24.1
+gitbucket_archive_version: 4.30.1
 gitbucket_url_dir: "https://github.com/gitbucket/gitbucket/releases/download/{{ gitbucket_archive_version }}/gitbucket.war"
 gitbucket_archive_ext: war
 gitbucket_archive_name: "gitbucket-{{ gitbucket_archive_version }}.{{ gitbucket_archive_ext }}"
