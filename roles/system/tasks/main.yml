@@ -29,10 +29,19 @@
   command: firewall-cmd --zone=public --add-service=http --permanent
   when: firewall_state.rc == 0
 
+- name: firewalldでgitbucketのサービス確認
+  become: yes
+  command: firewall-cmd --query-service=gitbucket
+  ignore_errors: yes
+  changed_when: false
+  check_mode: no
+  register: firewall_gitbuket_service
+  when: firewall_state.rc == 0
+
 - name: firewalldでgitbucketを作成
   become: yes
   command: firewall-cmd --permanent --new-service gitbucket
-  when: firewall_state.rc == 0
+  when: firewall_state.rc == 0 and firewall_gitbuket_service.rc != 0
 
 - name: firewalldでgitbucketのssh portを作成
   become: yes
