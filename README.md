@@ -10,16 +10,15 @@
 
 Ansibleを使ってRedmineを自動インストールするためのプレイブックです。以下のwebサイトで紹介されている手順におおむね準拠しています。
 
-[Redmine 3.4をCentOS 7.6にインストールする手順](http://blog.redmine.jp/articles/3_4/install/centos/)
+[Redmine 3.4をCentOS 8.0にインストールする手順](http://blog.redmine.jp/articles/3_4/install/centos/)
 
 
 ## システム構成
 
-* Redmine 3.4.7
-* CentOS 7.6
-* PostgreSQL 9.2.24
-* Apache 2.4.6
-* Gitbucket 4.30.1
+* Redmine 3.4.12
+* CentOS 8.0
+* PostgreSQL 10.6.1
+* Apache 2.4.37
 
 
 ## Redmineのインストール手順
@@ -51,6 +50,29 @@ git clone https://github.com/kuki444/redmine-centos-ansible.git
 
 vi /usr/local/src/redmine-centos-ansible/group_vars/redmine-servers
 
+### 連携リポジトリ
+
+# 配置場所
+git
+/var/lib/git/repo
+subversion
+/var/lib/svn/repo
+
+# リポジトリ 作成
+git
+cd /var/lib/git/repo
+git init --bare --shared プロジェクト識別子[.任意の文字].git
+subversion
+cd /var/lib/svn/repo
+svnadmin create プロジェクト識別子[.任意の文字]
+chmod -R g+w プロジェクト識別子[.任意の文字]
+
+# リポジトリURL
+git
+http://サーバIPアドレス/git/プロジェクト識別子[.任意の文字].git
+subversion
+http://サーバIPアドレス/svn/プロジェクト識別子[.任意の文字]
+
 ### playbook実行
 
 下記コマンドを実行してください。Redmineの自動インストールが開始されます。
@@ -61,8 +83,6 @@ ansible-playbook -i hosts site.yml
 ```
 
 10〜20分ほどでインストールが完了します。webブラウザで `http://サーバIPアドレス/redmine` にアクセスしてください。Redmineの画面が表示されるはずです。
-gitbucket webブラウザで `http://サーバIPアドレス/gitbucket` にアクセスしてください。gitbucketの画面が表示されるはずです。
-
 
 ## ライセンス
 

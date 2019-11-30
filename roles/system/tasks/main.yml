@@ -29,30 +29,6 @@
   command: firewall-cmd --zone=public --add-service=http --permanent
   when: firewall_state.rc == 0
 
-- name: firewalldでgitbucketのサービス確認
-  become: yes
-  command: firewall-cmd --query-service=gitbucket
-  ignore_errors: yes
-  changed_when: false
-  check_mode: no
-  register: firewall_gitbuket_service
-  when: firewall_state.rc == 0
-
-- name: firewalldでgitbucketを作成
-  become: yes
-  command: firewall-cmd --permanent --new-service gitbucket
-  when: firewall_state.rc == 0 and firewall_gitbuket_service.rc != 0
-
-- name: firewalldでgitbucketのssh portを作成
-  become: yes
-  command: firewall-cmd --permanent --service=gitbucket --add-port=29418/tcp
-  when: firewall_state.rc == 0
-
-- name: firewalldでgitbucketを許可
-  become: yes
-  command: firewall-cmd --zone=public --add-service=gitbucket --permanent
-  when: firewall_state.rc == 0
-
 - name: firewalldのポリシーをリロード
   become: yes
   command: firewall-cmd --reload
@@ -65,64 +41,41 @@
 - name: RubyとPassengerのビルドに必要な開発ツールやヘッダファイルのインストール
   become: yes
   yum:
-    name='openssl-devel,readline-devel,zlib-devel,curl-devel,libyaml-devel,libffi-devel'
+    name='openssl-devel,readline-devel,zlib-devel,curl-devel'
+
+- name: RubyとPassengerのビルドに必要なヘッダファイルのインストール２
+  become: yes
+  yum: enablerepo=PowerTools
+    name='libyaml-devel,libffi-devel'
 
 - name:  PostgreSQLとヘッダファイルのインストール
   become: yes
   yum:
-    name='postgresql-server,postgresql-devel,python-psycopg2'
+    name='postgresql-server,postgresql-devel,python3-psycopg2'
 
 - name: Apacheとヘッダファイルのインストール
   become: yes
   yum:
     name='httpd,httpd-devel'
 
-- name: ImageMagickとヘッダファイル・日本語フォントのインストール
+- name: ImageMagickと日本語フォントのインストール
   become: yes
   yum:
-    name='ImageMagick,ImageMagick-devel,ipa-pgothic-fonts'
+    name='ImageMagick,langpacks-ja'
+
+- name: ImageMagickヘッダファイルのインストール
+  become: yes
+  yum: enablerepo=PowerTools
+    name='ImageMagick-devel'
 
 - name: curlのインストール
   become: yes
   yum:
     name='curl'
 
-- name: yum Repository ius インストール
-  become: yes
-  shell:
-    curl -s https://setup.ius.io | sh
-  environment:
-    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
-  register:
-    result_ius
-  changed_when: false
-  failed_when: result_ius.rc not in [0, 1]
-
-- name: gitのアンインストール
-  become: yes
-  yum:
-    name='git'
-    state=absent
-
-- name: gitのインストール
-  become: yes
-  yum:
-    name='git2u'
-
-- name: yum Repository wandisco インストール
-  become: yes
-  template:
-    src=wandisco.repo
-    dest=/etc/yum.repos.d/wandisco.repo
-    force=no
-
-- name: yum Repository wandisco key インストール
-  rpm_key:
-    key: "http://opensource.wandisco.com/RPM-GPG-KEY-WANdisco"
-
 - name: subversion, mod_dav_svn のインストール
   become: yes
-  yum: enablerepo=wandisco-svn
+  yum:
     name='subversion,mod_dav_svn'
 
 - name: mod_dav_svnのコンフィグ削除
@@ -149,11 +102,6 @@
   become: yes
   yum:
     name='perl-Digest-SHA'
-
-- name: javaのインストール
-  become: yes
-  yum:
-    name='{{ java_version }}'
 
 - name: そのほかのツールのインストール
   become: yes
