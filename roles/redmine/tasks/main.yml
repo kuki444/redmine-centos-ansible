@@ -158,6 +158,82 @@
   when:
     result_database_yml is changed
 
+- name: clipboard_image_paste pluginのダウンロード
+  become: yes
+  git:
+    repo=https://github.com/peclik/clipboard_image_paste.git
+    dest={{ redmine_dir }}/plugins/clipboard_image_paste
+
+- name: redmine_issue_templates pluginのダウンロード
+  become: yes
+  git:
+    repo=https://github.com/akiko-pusu/redmine_issue_templates.git
+    version=0.2.1
+    dest={{ redmine_dir }}/plugins/redmine_issue_templates
+
+- name: pluginのダウンロード redmine_issues_summary_graph
+  become: yes
+  git:
+    repo=https://github.com/suer/redmine_issues_summary_graph.git
+    dest={{ redmine_dir }}/plugins/redmine_issues_summary_graph
+
+- name: pluginのダウンロード redmine_local_avatars
+  become: yes
+  git:
+    repo=https://github.com/ncoders/redmine_local_avatars.git
+    dest={{ redmine_dir }}/plugins/redmine_local_avatars
+
+- name: pluginのダウンロード redmine_pivot_table
+  become: yes
+  git:
+    repo=https://github.com/deecay/redmine_pivot_table.git
+    dest={{ redmine_dir }}/plugins/redmine_pivot_table
+
+- name: pluginのダウンロード redmine_theme_changer
+  become: yes
+  git:
+    repo=https://github.com/haru/redmine_theme_changer.git
+    version=0.3.1
+    dest={{ redmine_dir }}/plugins/redmine_theme_changer
+
+- name: pluginのダウンロード redmine_work_time
+  become: yes
+  git:
+    repo=https://github.com/tkusukawa/redmine_work_time.git
+    version=0.3.4
+    dest={{ redmine_dir }}/plugins/redmine_work_time
+
+- name: pluginのダウンロード redmine_custom_query_Count
+  become: yes
+  git:
+    repo=https://github.com/kuki444/redmine_custom_query_Count.git
+    dest={{ redmine_dir }}/plugins/redmine_custom_query_Count
+
+- name: pluginのダウンロード redmine_holidays_plugin
+  become: yes
+  git:
+    repo=https://github.com/kuki444/redmine_holidays_plugin.git
+    dest={{ redmine_dir }}/plugins/redmine_holidays_plugin
+
+- name: pluginのダウンロード wiki_extensions
+  become: yes
+  git:
+    repo=https://github.com/haru/redmine_wiki_extensions.git
+    version=0.8.2
+    dest={{ redmine_dir }}/plugins/redmine_wiki_extensions
+
+- name: pluginのダウンロード xls_export
+  become: yes
+  git:
+    repo=https://github.com/two-pack/redmine_xls_export.git
+    dest={{ redmine_dir }}/plugins/redmine_xls_export
+
+- name: pluginのダウンロード vividtone_mypage_blocks
+  become: yes
+  git:
+    repo=https://github.com/vividtone/redmine_vividtone_my_page_blocks.git
+    dest={{ redmine_dir }}/plugins/redmine_vividtone_my_page_blocks
+
 - name: pluginのマイグレーション
   become: yes
   command:
