@@ -15,11 +15,10 @@ Ansibleを使ってRedmineを自動インストールするためのプレイブ
 
 ## システム構成
 
-* Redmine 3.4.7
-* CentOS 7.6
-* PostgreSQL 9.2.24
-* Apache 2.4.6
-* Gitbucket 4.30.1
+* Redmine 4.1.1
+* CentOS 8.2
+* PostgreSQL 10.14
+* Apache 2.4.37
 
 
 ## Redmineのインストール手順
@@ -61,14 +60,34 @@ ansible-playbook -i hosts site.yml
 ```
 
 10〜20分ほどでインストールが完了します。webブラウザで `http://サーバIPアドレス/redmine` にアクセスしてください。Redmineの画面が表示されるはずです。
-gitbucket webブラウザで `http://サーバIPアドレス/gitbucket` にアクセスしてください。gitbucketの画面が表示されるはずです。
 
+## リポジトリ作成
+
+```
+# gitの場合
+su - git
+cd /var/lib/git/repo
+git init --bare [プロジェクト識別子][.任意の文字].git
+例：識別子が「test」の場合
+git init --bare test.git
+git init --bare test.2.git
+# svnの場合
+cd /var/lib/svn/repo
+svnadmin create  [プロジェクト識別子][.任意の文字]
+chown -R apache:apache
+```
+
+## リポジトリURL
+git
+`http://サーバIPアドレス/git/[プロジェクト識別子][.任意の文字].git` 
+svn
+`http://サーバIPアドレス/svn/[プロジェクト識別子][.任意の文字]` 
 
 ## ライセンス
 
 MIT License
 
 
-## 作者
+## 作成元
 
 [ファーエンドテクノロジー株式会社](http://www.farend.co.jp/)

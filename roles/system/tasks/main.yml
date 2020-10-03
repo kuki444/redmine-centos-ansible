@@ -1,3 +1,8 @@
+- name: 作業ディレクトリ作成
+  file: path={{ work_dir }}
+    state=directory
+    mode=0744
+
 - name: SELinuxの状態確認
   command:
     /usr/sbin/selinuxenabled
@@ -29,30 +34,6 @@
   command: firewall-cmd --zone=public --add-service=http --permanent
   when: firewall_state.rc == 0
 
-- name: firewalldでgitbucketのサービス確認
-  become: yes
-  command: firewall-cmd --query-service=gitbucket
-  ignore_errors: yes
-  changed_when: false
-  check_mode: no
-  register: firewall_gitbuket_service
-  when: firewall_state.rc == 0
-
-- name: firewalldでgitbucketを作成
-  become: yes
-  command: firewall-cmd --permanent --new-service gitbucket
-  when: firewall_state.rc == 0 and firewall_gitbuket_service.rc != 0
-
-- name: firewalldでgitbucketのssh portを作成
-  become: yes
-  command: firewall-cmd --permanent --service=gitbucket --add-port=29418/tcp
-  when: firewall_state.rc == 0
-
-- name: firewalldでgitbucketを許可
-  become: yes
-  command: firewall-cmd --zone=public --add-service=gitbucket --permanent
-  when: firewall_state.rc == 0
-
 - name: firewalldのポリシーをリロード
   become: yes
   command: firewall-cmd --reload
@@ -62,6 +43,10 @@
   become: yes
   yum: name='@Development Tools'
 
+- name: PowerTools　On
+  become: yes
+  shell: 'dnf config-manager --set-enabled PowerTools'
+
 - name: RubyとPassengerのビルドに必要な開発ツールやヘッダファイルのインストール
   become: yes
   yum:
@@ -70,44 +55,50 @@
 - name:  PostgreSQLとヘッダファイルのインストール
   become: yes
   yum:
-    name='postgresql-server,postgresql-devel,python-psycopg2'
+    name='postgresql-server,postgresql-devel,python3-psycopg2'
 
 - name: Apacheとヘッダファイルのインストール
   become: yes
   yum:
     name='httpd,httpd-devel'
 
-- name: ImageMagickとヘッダファイル・日本語フォントのインストール
+- name: ImageMagickとヘッダファイル
   become: yes
   yum:
-    name='ImageMagick,ImageMagick-devel,ipa-pgothic-fonts'
+    name='ImageMagick,ImageMagick-devel'
+
+- name: ghostscriptインストール（pdf用
+  become: yes
+  yum:
+    name='ghostscript-tools-dvipdf'
+
+- name: 日本語フォントのダウンロード
+  get_url:
+    url=https://moji.or.jp/wp-content/ipafont/IPAexfont/IPAexfont00401.zip
+    dest={{ work_dir }}
+
+- name: 日本語フォントのを展開
+  unarchive:
+    src={{ work_dir }}/IPAexfont00401.zip
+    dest={{ work_dir }}
+    copy=no
+
+- name: subversion Redmine svn設定のフォルダ作成1/2
+  file:
+    path=/usr/share/fonts/opentype/ipaexfont-gothic
+    state=directory
+    mode=0644
+
+- name: 日本語フォントのインストール
+  copy:
+    src={{ work_dir }}/IPAexfont00401/ipaexg.ttf
+    dest=/usr/share/fonts/opentype/ipaexfont-gothic/
+    mode=0644
 
 - name: curlのインストール
   become: yes
   yum:
     name='curl'
-
-- name: yum Repository ius インストール
-  become: yes
-  shell:
-    curl -s https://setup.ius.io | sh
-  environment:
-    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
-  register:
-    result_ius
-  changed_when: false
-  failed_when: result_ius.rc not in [0, 1]
-
-- name: gitのアンインストール
-  become: yes
-  yum:
-    name='git'
-    state=absent
-
-- name: gitのインストール
-  become: yes
-  yum:
-    name='git2u'
 
 - name: yum Repository wandisco インストール
   become: yes
@@ -150,11 +141,6 @@
   yum:
     name='perl-Digest-SHA'
 
-- name: javaのインストール
-  become: yes
-  yum:
-    name='{{ java_version }}'
-
 - name: そのほかのツールのインストール
   become: yes
   yum:
@@ -170,7 +156,3 @@
     home=/var/lib/git
     comment="Git repository"
 
-- name: 作業ディレクトリ作成
-  file: path={{ work_dir }}
-    state=directory
-    mode=0755
