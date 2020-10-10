@@ -113,7 +113,7 @@
 
 - name: subversion, mod_dav_svn のインストール
   become: yes
-  yum:
+  yum: enablerepo=wandisco-svn
     name='subversion,mod_dav_svn'
 
 - name: mod_dav_svnのコンフィグ削除
