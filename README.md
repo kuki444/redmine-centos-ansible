@@ -83,7 +83,6 @@ ansible-playbook -i hosts site.yml
 ```
 
 10〜20分ほどでインストールが完了します。webブラウザで `http://サーバIPアドレス/redmine` にアクセスしてください。Redmineの画面が表示されるはずです。
-<<<<<<< HEAD
 
 ## リポジトリ作成
 
@@ -106,8 +105,6 @@ git
 `http://サーバIPアドレス/git/[プロジェクト識別子][.任意の文字].git` 
 svn
 `http://サーバIPアドレス/svn/[プロジェクト識別子][.任意の文字]` 
-=======
->>>>>>> be63e1c73a1d4f8652dfaaaeabc16169c5138ac1
 
 ## ライセンス
 
