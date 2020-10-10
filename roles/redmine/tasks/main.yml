@@ -95,13 +95,26 @@
   become: yes
   git:
     repo=https://github.com/tsi/redmine-theme-flat.git
-    dest={{ redmine_dir }}/public/themes/redmine-theme-flat
+    dest={{ redmine_dir }}/public/themes/flat
 
 - name: Dwarfテーマのダウンロード
   become: yes
   git:
     repo=https://github.com/Feckinotter/Dwarf.git
     dest={{ redmine_dir }}/public/themes/Dwarf
+
+- name: bleuclairテーマのダウンロード
+  become: yes
+  git:
+    repo=https://github.com/farend/redmine_theme_farend_bleuclair.git
+    dest={{ redmine_dir }}/public/themes/bleuclair
+    version=redmine4.0
+
+- name: gitmikeテーマのダウンロード
+  become: yes
+  git:
+    repo=https://github.com/makotokw/redmine-theme-gitmike.git
+    dest={{ redmine_dir }}/public/themes/gitmike
 
 - name: テーマをfarend_basicに切り替え
   become: yes
@@ -157,6 +170,81 @@
     RAILS_ENV: production
   when:
     result_database_yml is changed
+
+- name: redmine_xls_export pluginのダウンロード
+  become: yes
+  git:
+    repo=https://github.com/two-pack/redmine_xls_export.git
+    dest={{ redmine_dir }}/plugins/redmine_xls_export
+
+- name: redmine_custom_query_count pluginのダウンロード
+  become: yes
+  git:
+    repo=https://github.com/kuki444/redmine_custom_query_count.git
+    dest={{ redmine_dir }}/plugins/redmine_custom_query_count
+
+- name: redmine_wiki_extensions pluginのダウンロード
+  become: yes
+  git:
+    repo=https://github.com/haru/redmine_wiki_extensions.git
+    dest={{ redmine_dir }}/plugins/redmine_wiki_extensions
+
+- name: redmine_vividtone_my_page_blocks pluginのダウンロード
+  become: yes
+  git:
+    repo=https://github.com/ishikawa999/redmine_vividtone_my_page_blocks.git
+    dest={{ redmine_dir }}/plugins/redmine_vividtone_my_page_blocks
+
+- name: redmine_holidays_plugin pluginのダウンロード
+  become: yes
+  git:
+    repo=https://github.com/vegaminer/redmine_holidays_plugin.git
+    dest={{ redmine_dir }}/plugins/redmine_holidays_plugin
+
+- name: redmine_work_time pluginのダウンロード
+  become: yes
+  git:
+    repo=https://github.com/tkusukawa/redmine_work_time.git
+    dest={{ redmine_dir }}/plugins/redmine_work_time
+
+- name: redmine_issue_templates pluginのダウンロード
+  become: yes
+  git:
+    repo=https://github.com/akiko-pusu/redmine_issue_templates.git
+    dest={{ redmine_dir }}/plugins/redmine_issue_templates
+
+- name: redmine_theme_changer pluginのダウンロード
+  become: yes
+  git:
+    repo=https://github.com/haru/redmine_theme_changer.git
+    dest={{ redmine_dir }}/plugins/redmine_theme_changer
+
+- name: redmine_local_avatars pluginのダウンロード
+  become: yes
+  git:
+    repo=https://github.com/rehpyc/redmine_local_avatars.git
+    dest={{ redmine_dir }}/plugins/redmine_local_avatars
+
+- name: redmine_issues_summary_graph pluginのダウンロード
+  become: yes
+  git:
+    repo=https://github.com/suer/redmine_issues_summary_graph.git
+    dest={{ redmine_dir }}/plugins/redmine_issues_summary_graph
+
+- name: redmine_scm pluginのダウンロード
+  become: yes
+  git:
+    repo=https://github.com/farend/scm-creator.git
+    dest={{ redmine_dir }}/plugins/redmine_scm
+
+- name: scm.ymlの作成(redmine_scm plugins用設定)
+  become: yes
+  template:
+    src=scm.yml
+    dest={{ redmine_dir }}/config/scm.yml
+    force=no
+  register:
+    result_scm_yml
 
 - name: pluginのマイグレーション
   become: yes
@@ -218,3 +306,13 @@
     mode=2775
     owner=git
     group=apache
+
+- name: cron設定(リマインダー設定)
+  become: yes
+  cron:
+    name: redmine_reminder
+    minute: 30
+    hour: 9
+    job: "cd /var/lib/redmine ; bundle exec rake redmine:send_reminders RAILS_ENV=production"
+    state: present
+

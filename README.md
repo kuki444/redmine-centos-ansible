@@ -106,6 +106,29 @@ git
 svn
 `http://サーバIPアドレス/svn/[プロジェクト識別子][.任意の文字]` 
 
+
+## redmine追加テーマ
+Dwarf
+bleuclair
+farend_basic
+farend_fancy
+flat
+gitmike
+
+## redmine 追加 plugins
+Issues XLS export
+My Page Blocks plugin
+Redmine Custom Query Count plugin
+Redmine Extended Reminder plugin
+Redmine Holidays Plugin
+Redmine Issue Templates plugin
+Redmine Issues Summary Graph plugin
+Redmine Local Avatars plugin
+Redmine SCM
+Redmine Theme Changer plugin
+Redmine Wiki Extensions plugin
+Redmine Work Time plugin
+
 ## ライセンス
 
 MIT License
@@ -114,3 +137,7 @@ MIT License
 ## 作成元
 
 [ファーエンドテクノロジー株式会社](http://www.farend.co.jp/)
+
+## 変更
+kuki444
+
