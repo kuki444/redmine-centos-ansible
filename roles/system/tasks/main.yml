@@ -50,7 +50,7 @@
 - name: RubyとPassengerのビルドに必要な開発ツールやヘッダファイルのインストール
   become: yes
   yum:
-    name='openssl-devel,readline-devel,zlib-devel,curl-devel,libyaml-devel,libffi-devel'
+    name='openssl-devel,readline-devel,zlib-devel,curl-devel'
 
 - name:  PostgreSQLとヘッダファイルのインストール
   become: yes
@@ -113,7 +113,7 @@
 
 - name: subversion, mod_dav_svn のインストール
   become: yes
-  yum: enablerepo=wandisco-svn
+  yum:
     name='subversion,mod_dav_svn'
 
 - name: mod_dav_svnのコンフィグ削除

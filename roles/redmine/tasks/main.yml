@@ -3,7 +3,7 @@
   git:
     repo={{ redmine_git_url }}
     dest={{ redmine_dir }}
-    version={{ redmine_version }} 
+    version={{ redmine_version }}
 
 - name: database.ymlの作成
   become: yes
@@ -158,6 +158,24 @@
   when:
     result_database_yml is changed
 
+- name: pluginのマイグレーション
+  become: yes
+  command:
+    bundle install
+    chdir={{ redmine_dir }}
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+    RAILS_ENV: production
+
+- name: pluginのデータベースのマイグレーション
+  become: yes
+  command:
+    bundle exec rake redmine:plugins:migrate
+    chdir={{ redmine_dir }}
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+    RAILS_ENV: production
+
 - name: Redmine Authn設定のフォルダ作成
   file:
     path=/etc/httpd/Apache/Authn
@@ -200,5 +218,3 @@
     mode=2775
     owner=git
     group=apache
-
-
