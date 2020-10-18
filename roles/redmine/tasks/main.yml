@@ -307,6 +307,14 @@
     owner=git
     group=apache
 
+- name: github Redmine repo設定のフォルダ作成
+  file:
+    path=/var/lib/github
+    state=directory
+    mode=2775
+    owner=git
+    group=apache
+
 - name: cron設定(リマインダー設定)
   become: yes
   cron:
