@@ -224,6 +224,7 @@
   git:
     repo=https://github.com/rehpyc/redmine_local_avatars.git
     dest={{ redmine_dir }}/plugins/redmine_local_avatars
+    version="redmine_4.1.0"
 
 - name: redmine_issues_summary_graph pluginのダウンロード
   become: yes
